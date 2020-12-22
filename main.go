@@ -3,8 +3,9 @@ package main
 import (
 	"fmt"
 	"strings"
+	"time"
 
-	"github.com/windroldev/dilunganet/actions"
+	"github.com/windroldev/dnet/actions"
 )
 
 func main() {
@@ -12,37 +13,39 @@ func main() {
 	actionController := 0
 
 	for actionController == 0 {
-		fmt.Print("What do you want to do? (stop/start/create/install): ")
+		fmt.Print("What do you want to do? (stop/start/create): ")
 		action = ""
-		if _, err := fmt.Scanf("%s", &action); err != nil {
-			fmt.Println(err)
-			return
-		}
+		fmt.Scanf("%s", &action)
 		if strings.ToLower(action) == "stop" || strings.ToLower(action) == "start" || strings.ToLower(action) == "create" {
 			actionController = 1
 		} else {
-			fmt.Println("Please choose the proper action")
+			actions.Clear()
+			fmt.Println("\nPlease choose the proper action")
 		}
 
 	}
 
 	// if it requires to stop the started hostednetwork
 	if strings.ToLower(action) == "stop" {
-		actions.Stop()
-		// end the program
-		return
-	}
-	// if it requires to only start the hostednetwork without recreating a new one
-	if strings.ToLower(action) == "start" {
-		actions.Start()
-		// end the program
-		return
-	}
+		if err := actions.Stop(); err != nil {
+			fmt.Println(err)
+		}
+		time.Sleep(3 * time.Second)
 
-	// if it requires to create a new virtual wlan hostednetwork
-	if strings.ToLower(action) == "create" {
-		actions.Create()
-		actions.Start()
+	} else if strings.ToLower(action) == "start" {
+		if err := actions.Start(); err != nil {
+			fmt.Println(err)
+		}
+		time.Sleep(24 * time.Hour)
+	} else if strings.ToLower(action) == "create" {
+		if err := actions.Create(); err != nil {
+			fmt.Println(err)
+			return
+		}
+		if err := actions.Start(); err != nil {
+			fmt.Println(err)
+		}
+		time.Sleep(24 * time.Hour)
 	}
 
 }

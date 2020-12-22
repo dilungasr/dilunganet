@@ -9,7 +9,7 @@ import (
 )
 
 // Create is function for creating the hostednetworks
-func Create() {
+func Create() error {
 	// take the name of the network
 	reader := bufio.NewReader(os.Stdin)
 
@@ -19,8 +19,7 @@ func Create() {
 	netname = strings.Replace(netname, "\r", "", -1)
 
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err
 	}
 
 	// take the password of the network
@@ -30,8 +29,7 @@ func Create() {
 	netpassword = strings.Replace(netpassword, "\n", "", -1)
 	netpassword = strings.Replace(netpassword, "\r", "", -1)
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err
 	}
 
 	// let's creafte the network
@@ -43,7 +41,8 @@ func Create() {
 
 	// execute the command
 	if err = createNetwork.Run(); err != nil {
-		fmt.Println(err)
-		return
+		return err
 	}
+
+	return nil
 }

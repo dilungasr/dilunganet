@@ -7,7 +7,7 @@ import (
 )
 
 // Stop is a function to stop the hostednetwork
-func Stop() {
+func Stop() error {
 	stopHostedNetwork := exec.Command("netsh", "wlan", "stop", "hostednetwork")
 
 	stopHostedNetwork.Stdout = os.Stdout
@@ -15,6 +15,16 @@ func Stop() {
 
 	//run the command
 	if err := stopHostedNetwork.Run(); err != nil {
-		fmt.Println(err)
+		return err
 	}
+
+	// Clear the console.
+	Clear()
+
+	// Goodbye message....
+	fmt.Println(string(colorGreen), `
+	                  See you again ;)`, string(colorReset),
+	)
+
+	return nil
 }

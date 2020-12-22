@@ -1,3 +1,3 @@
-module github.com/windroldev/dilunganet
+module github.com/windroldev/dnet
 
 go 1.14
